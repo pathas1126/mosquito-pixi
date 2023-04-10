@@ -34,7 +34,6 @@ interface IProps {
 const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
   const [mosquitos, setMosquitos] = useState<{ length: number; index: number; backgroundImage: string; title: string }[]>([]);
   const [date, setDate] = useState('');
-  const [circleRadius, setCircleRaius] = useState(280);
   const refMosquitoSection = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -52,18 +51,6 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
       { title: '주거지', length: mosquitosHouseLength, index: mosquitosHouseIndex, backgroundImage: 'apartment.jpg' },
     ]);
   }, [mosquitoStatus]);
-
-  useEffect(() => {
-    const resizeCircleDiameter = () => {
-      if (!refMosquitoSection.current?.offsetHeight) return;
-      const radius = Math.floor(refMosquitoSection.current?.offsetHeight / 4);
-      setCircleRaius(radius);
-    };
-
-    window.addEventListener('resize', resizeCircleDiameter);
-
-    return () => window.removeEventListener('resize', resizeCircleDiameter);
-  }, []);
 
   const getMosquitosLength = (indexString: string) => {
     const index = Number(indexString);
@@ -100,14 +87,7 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
                 background: getBackgroundColor(mosquito.index),
               }}
             >
-              <div
-                className={styles['mosquito-circle']}
-                style={{
-                  width: `${circleRadius}px`,
-                  height: `${circleRadius}px`,
-                  borderRadius: `${circleRadius}px`,
-                }}
-              >
+              <div className={styles['mosquito-rectangle']}>
                 <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} />
               </div>
               <div className={styles['mosquito-info']}>
@@ -174,7 +154,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const resToday = await fetch(getMosquitoStatusURL(today));
     const dataToday = (await resToday.json()) as IMosquitoStatusSuccessResponse;
-    console.log('🚀 ~ file: index.tsx:151 ~ getServerSideProps ~ dataToday:', dataToday);
 
     const successedToday = dataToday?.MosquitoStatus?.RESULT.CODE === RESPONSE_SUCCESS_CODE;
 
