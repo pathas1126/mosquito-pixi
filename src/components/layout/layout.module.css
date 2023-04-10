@@ -1,0 +1,8 @@
+.main {
+  width:100%;
+  max-width: 500px;
+  margin: 0 auto;
+  height: 100vh;
+  border: 2px solid #068B78;
+  display: flex;
+}
