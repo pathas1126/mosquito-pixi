@@ -3,6 +3,9 @@ import styles from '@/styles/home.module.scss';
 import dayjs from 'dayjs';
 import { GetServerSidePropsContext } from 'next';
 import { useEffect, useRef, useState } from 'react';
+import localFont from 'next/font/local';
+
+const cyberpunk = localFont({ src: './fonts/Cyberpunk.ttf' });
 
 const references = [
   {
@@ -68,7 +71,7 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
   return (
     <main className={styles.main} id="home">
       <header className={styles.header}>
-        <h2>위잉위잉</h2>
+        <h2 className={cyberpunk.className}>We-ing We-ing</h2>
         <h6>{date || '-'} 서울 모기 지수</h6>
         <div className={styles.palette}>
           <div>쾌적</div>

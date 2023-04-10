@@ -3,6 +3,9 @@ import Layout from '@/components/layout/layout';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Noto_Sans_KR, Noto_Serif_KR } from 'next/font/google';
+import localFont from 'next/font/local';
+
+const blenderProBook = localFont({ src: './fonts/BlenderPro-Book.woff2' });
 
 const notoSansKr = Noto_Sans_KR({ weight: ['400', '500', '700'], subsets: ['latin'] });
 const notoSerifKr = Noto_Serif_KR({ weight: ['200', '300', '400', '500', '600'], subsets: ['latin'] });
@@ -16,7 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/mosquito.png" />
       </Head>
-      <Layout className={`${notoSansKr.className} ${notoSerifKr}`}>
+      <Layout className={`${notoSansKr.className} ${notoSerifKr} ${blenderProBook}`}>
         <Component {...pageProps} />
       </Layout>
     </>
