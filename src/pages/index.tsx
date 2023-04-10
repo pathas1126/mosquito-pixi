@@ -2,7 +2,7 @@ import Mosquito from '@/components/mosquito/mosquito';
 import styles from '@/styles/home.module.scss';
 import dayjs from 'dayjs';
 import { GetServerSidePropsContext } from 'next';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const references = [
   {
@@ -34,6 +34,8 @@ interface IProps {
 const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
   const [mosquitos, setMosquitos] = useState<{ length: number; index: number; backgroundImage: string; title: string }[]>([]);
   const [date, setDate] = useState('');
+  const [circleRadius, setCircleRaius] = useState(280);
+  const refMosquitoSection = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!mosquitoStatus) return;
@@ -50,6 +52,18 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
       { title: '주거지', length: mosquitosHouseLength, index: mosquitosHouseIndex, backgroundImage: 'apartment.jpg' },
     ]);
   }, [mosquitoStatus]);
+
+  useEffect(() => {
+    const resizeCircleDiameter = () => {
+      if (!refMosquitoSection.current?.offsetHeight) return;
+      const radius = Math.floor(refMosquitoSection.current?.offsetHeight / 4);
+      setCircleRaius(radius);
+    };
+
+    window.addEventListener('resize', resizeCircleDiameter);
+
+    return () => window.removeEventListener('resize', resizeCircleDiameter);
+  }, []);
 
   const getMosquitosLength = (indexString: string) => {
     const index = Number(indexString);
@@ -77,10 +91,23 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
         </div>
       </header>
       {mosquitoStatus ? (
-        <section className={styles['mosquito-section']}>
+        <section className={styles['mosquito-section']} ref={refMosquitoSection}>
           {mosquitos.map((mosquito, index) => (
-            <article className={styles['mosquito-wrapper']} key={index} style={{ background: getBackgroundColor(mosquito.index) }}>
-              <div className={styles['mosquito-circle']}>
+            <article
+              className={styles['mosquito-wrapper']}
+              key={index}
+              style={{
+                background: getBackgroundColor(mosquito.index),
+              }}
+            >
+              <div
+                className={styles['mosquito-circle']}
+                style={{
+                  width: `${circleRadius}px`,
+                  height: `${circleRadius}px`,
+                  borderRadius: `${circleRadius}px`,
+                }}
+              >
                 <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} />
               </div>
               <div className={styles['mosquito-info']}>
