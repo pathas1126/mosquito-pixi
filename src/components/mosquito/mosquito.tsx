@@ -22,6 +22,7 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
       const app = new PIXI.Application({ resizeTo: mainElement, antialias: true });
       mainElement.appendChild(app.view as any);
       app.ticker.add(() => TWEEDLE.Group.shared.update());
+
       setPixi(app);
     }
   }, [pixi]);
@@ -45,7 +46,7 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
       pointLength: pathPointLength,
     });
 
-    const mosquitos = getMosquitos({ texture, length: mosquitoLength });
+    const mosquitos = getMosquitos({ texture, length: mosquitoLength, pixi });
 
     animate({ mosquitos, pixi, time: TIME, xPaths, yPaths });
 
@@ -71,21 +72,23 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
     return { xPaths: xPathsRandom, yPaths: yPathsRandom };
   };
 
-  const getMosquitos = ({ texture, length }: { texture: PIXI.Texture; length: number }) => {
+  const getMosquitos = ({ texture, length, pixi }: { texture: PIXI.Texture; length: number; pixi: PIXI.Application }) => {
     const moiquitos = new Array(length).fill(0).map(() => {
       const mosquito = new PIXI.Sprite(texture);
       mosquito.interactive = true;
       mosquito.cursor = 'pointer';
-      mosquito.on('pointerdown', () => {
-        const texture = PIXI.Texture.from('blood.png');
+      mosquito.zIndex = 1;
+      mosquito.on('pointerdown', (event) => {
+        const textureBlood = PIXI.Texture.from('blood.png');
+        const spriteBlood = new PIXI.Sprite(textureBlood);
+        spriteBlood.width = 40;
+        spriteBlood.height = 40;
+        spriteBlood.zIndex = 0;
+        spriteBlood.position.x = event.screen.x;
+        spriteBlood.position.y = event.screen.y;
+        pixi.stage.addChild(spriteBlood);
 
-        mosquito.texture = texture;
-        mosquito.width = 40;
-        mosquito.height = 40;
-
-        setTimeout(() => {
-          mosquito.visible = false;
-        }, 150);
+        mosquito.visible = false;
       });
       mosquito.width = 30;
       mosquito.height = 30;
