@@ -19,7 +19,7 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
 
     if (!mainElement) return;
     if (!pixi) {
-      const app = new PIXI.Application({ resizeTo: mainElement, antialias: true });
+      const app = new PIXI.Application({ resizeTo: mainElement });
       mainElement.appendChild(app.view as any);
       app.ticker.add(() => TWEEDLE.Group.shared.update());
 
@@ -81,8 +81,8 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
       mosquito.on('pointerdown', (event) => {
         const textureBlood = PIXI.Texture.from('blood.png');
         const spriteBlood = new PIXI.Sprite(textureBlood);
-        spriteBlood.width = 40;
-        spriteBlood.height = 40;
+        spriteBlood.width = 45;
+        spriteBlood.height = 45;
         spriteBlood.zIndex = 0;
         spriteBlood.position.x = event.screen.x;
         spriteBlood.position.y = event.screen.y;

@@ -9,27 +9,14 @@ const cyberpunk = localFont({ src: './fonts/Cyberpunk.ttf' });
 const blenderProBook = localFont({ src: './fonts/BlenderPro-Book.woff2' });
 
 const references = [
+  { url: 'http://data.seoul.go.kr/dataList/OA-13285/S/1/datasetView.do', title: 'Seoul Mosquito Index', platform: 'Seoul' },
   {
-    url: 'https://www.freepik.com/free-vector/green-grass-vector-seamless-texture-lawn-nature-meadow-plant-field-natural-outdoor-illustration_11059458.htm#query=seamless%20grass%20texture&position=2&from_view=keyword&track=ais',
-    title: '풀 이미지',
-    author: 'macrovector',
-    platform: 'Freepik',
+    url: 'https://www.vecteezy.com/free-png/grid',
+    title: 'Grid PNGs',
+    platform: 'Vecteezy',
   },
-  {
-    url: 'https://www.freepik.com/free-photo/abstract-background-water-swimming-pool_1147933.htm#page=7&query=pond%20texture&position=4&from_view=search&track=ais',
-    title: '물 이미지',
-    author: 'Waewkidja',
-    platform: 'Freepik',
-  },
-  { url: 'https://www.pngkey.com/detail/u2q8y3y3u2y3u2i1_mosquito-icon-mosquito-icon-png/', title: '모기 이미지', platform: 'Pngkey' },
-  {
-    url: 'https://www.freepik.com/free-vector/building-facade_785895.htm#query=apartment%20exture&position=3&from_view=search&track=ais',
-    title: '건물 이미지',
-    author: 'nucleartist',
-    platform: 'Freepik',
-  },
-  { url: 'http://data.seoul.go.kr/dataList/OA-13285/S/1/datasetView.do', title: '서울 열린 데이터 광장', platform: '서울특별시' },
-  { url: 'https://www.pngkey.com/detail/u2a9o0i1q8t4a9t4_orange-watercolor-drop-hd-blood-drop-transparent-free/', title: '피 이미지', platform: 'Pngkey' },
+  { url: 'https://www.flaticon.com/free-icons/entomology', title: 'Mosquito  Icon', author: 'AbtoCreative', platform: 'Flaticon' },
+  { url: 'https://www.pngkey.com/detail/u2a9o0i1q8t4a9t4_orange-watercolor-drop-hd-blood-drop-transparent-free/', title: 'Blood PNG', platform: 'Pngkey' },
 ];
 interface IProps {
   mosquitoStatus: IMosquitoStatus;
@@ -50,9 +37,9 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     const { mosquitosLength: mosquitosHouseLength, index: mosquitosHouseIndex } = getMosquitosLength(mosquitoStatus.MOSQUITO_VALUE_HOUSE);
 
     setMosquitos([
-      { title: 'Park', length: mosquitosParkLength, index: mosquitosParkIndex, backgroundImage: 'grass.jpg' },
-      { title: 'Water', length: mosquitosWaterLength, index: mosquitosWaterIndex, backgroundImage: 'pool.jpg' },
-      { title: 'Residence', length: mosquitosHouseLength, index: mosquitosHouseIndex, backgroundImage: 'apartment.jpg' },
+      { title: 'Park', length: mosquitosParkLength, index: mosquitosParkIndex, backgroundImage: 'grid_park.png' },
+      { title: 'Water', length: mosquitosWaterLength, index: mosquitosWaterIndex, backgroundImage: 'grid_water.png' },
+      { title: 'Residence', length: mosquitosHouseLength, index: mosquitosHouseIndex, backgroundImage: 'grid_residence.png' },
     ]);
   }, [mosquitoStatus]);
 
