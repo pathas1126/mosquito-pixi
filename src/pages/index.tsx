@@ -5,6 +5,10 @@ import { GetServerSidePropsContext } from 'next';
 import { useEffect, useRef, useState } from 'react';
 import localFont from 'next/font/local';
 import useMobile from '@/hooks/useMobile';
+import Slider from 'react-slick';
+import { Settings } from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const cyberpunk = localFont({ src: './fonts/Cyberpunk.ttf' });
 const blenderProBook = localFont({ src: './fonts/BlenderPro-Book.woff2' });
@@ -59,6 +63,16 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     return 'good';
   };
 
+  const sliderSettings: Settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    centerMode: true,
+    adaptiveHeight: true,
+  };
+
   return (
     <main className={styles.main} id="home">
       <header className={styles.header}>
@@ -74,17 +88,35 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
               <span key={step}>{step}</span>
             ))}
           </div>
-          {mosquitos.map((mosquito, index) => (
-            <article className={`${styles['mosquito-wrapper']} ${styles[getBackgroundClassName(mosquito.index)]}`} key={index}>
-              <div className={styles['mosquito-rectangle']}>
-                <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} />
-              </div>
-              <span className={styles['mosquito-info']} data-title={mosquito.title}>
-                {/* <h3>{mosquito.title}</h3> */}
-                Mosquito Index: {mosquito.index}
-              </span>
-            </article>
-          ))}
+          {isMobile ? (
+            <div style={{ width: '100%', height: '100%' }}>
+              <Slider {...sliderSettings}>
+                {mosquitos.map((mosquito, index) => (
+                  <article className={`${styles['mosquito-wrapper']} ${styles[getBackgroundClassName(mosquito.index)]}`} key={index}>
+                    <div className={styles['mosquito-rectangle']}>
+                      <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} />
+                    </div>
+                    <span className={styles['mosquito-info']} data-title={mosquito.title}>
+                      {/* <h3>{mosquito.title}</h3> */}
+                      Mosquito Index: {mosquito.index}
+                    </span>
+                  </article>
+                ))}
+              </Slider>
+            </div>
+          ) : (
+            mosquitos.map((mosquito, index) => (
+              <article className={`${styles['mosquito-wrapper']} ${styles[getBackgroundClassName(mosquito.index)]}`} key={index}>
+                <div className={styles['mosquito-rectangle']}>
+                  <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} />
+                </div>
+                <span className={styles['mosquito-info']} data-title={mosquito.title}>
+                  {/* <h3>{mosquito.title}</h3> */}
+                  Mosquito Index: {mosquito.index}
+                </span>
+              </article>
+            ))
+          )}
         </section>
       ) : (
         <section className={`${styles['mosquito-section-no-data']} ${cyberpunk.className}`}>
