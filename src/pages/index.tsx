@@ -50,9 +50,9 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     const { mosquitosLength: mosquitosHouseLength, index: mosquitosHouseIndex } = getMosquitosLength(mosquitoStatus.MOSQUITO_VALUE_HOUSE);
 
     setMosquitos([
-      { title: '공원', length: mosquitosParkLength, index: mosquitosParkIndex, backgroundImage: 'grass.jpg' },
-      { title: '수변부', length: mosquitosWaterLength, index: mosquitosWaterIndex, backgroundImage: 'pool.jpg' },
-      { title: '주거지', length: mosquitosHouseLength, index: mosquitosHouseIndex, backgroundImage: 'apartment.jpg' },
+      { title: 'Park', length: mosquitosParkLength, index: mosquitosParkIndex, backgroundImage: 'grass.jpg' },
+      { title: 'Water', length: mosquitosWaterLength, index: mosquitosWaterIndex, backgroundImage: 'pool.jpg' },
+      { title: 'Residence', length: mosquitosHouseLength, index: mosquitosHouseIndex, backgroundImage: 'apartment.jpg' },
     ]);
   }, [mosquitoStatus]);
 
@@ -62,11 +62,11 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     return { mosquitosLength: roundedIndex, index };
   };
 
-  const getBackgroundColor = (index: number) => {
-    if (index >= 75) return '#880E4F';
-    if (index >= 50) return '#AD1457';
-    if (index >= 25) return '#F06292';
-    return '#F48FB1';
+  const getBackgroundClassName = (index: number) => {
+    if (index >= 75) return 'horrible';
+    if (index >= 50) return 'attention';
+    if (index >= 25) return 'concern';
+    return 'good';
   };
 
   return (
@@ -74,50 +74,47 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
       <header className={styles.header}>
         <h2 className={cyberpunk.className}>We-ing We-ing</h2>
         <h6 className={blenderProBook.className}>{date || '-'} Seoul Mosquito Index</h6>
-        {/* <div className={styles.palette}>
-          <div>쾌적</div>
-          <div>관심</div>
-          <div>주의</div>
-          <div>불쾌</div>
-        </div> */}
       </header>
       {mosquitoStatus ? (
         <section className={styles['mosquito-section']} ref={refMosquitoSection}>
+          <div className={`${styles.palette} ${blenderProBook.className}`}>
+            {['Good', 'Concern', 'Attention', 'Horrible'].map((step) => (
+              <span key={step}>{step}</span>
+            ))}
+          </div>
           {mosquitos.map((mosquito, index) => (
-            <article
-              className={styles['mosquito-wrapper']}
-              key={index}
-              style={{
-                background: getBackgroundColor(mosquito.index),
-              }}
-            >
+            <article className={`${styles['mosquito-wrapper']} ${styles[getBackgroundClassName(mosquito.index)]}`} key={index}>
               <div className={styles['mosquito-rectangle']}>
                 <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} />
               </div>
-              <div className={styles['mosquito-info']}>
-                <h3>{mosquito.title}</h3>
-                <p>모기지수: {mosquito.index}</p>
-              </div>
+              <span className={styles['mosquito-info']} data-title={mosquito.title}>
+                {/* <h3>{mosquito.title}</h3> */}
+                Mosquito Index: {mosquito.index}
+              </span>
             </article>
           ))}
         </section>
       ) : (
-        <section className={styles['mosquito-section-no-data']}>
-          <h2>모기 지수 데이터가 없습니다.</h2>
+        <section className={`${styles['mosquito-section-no-data']} ${cyberpunk.className}`}>
+          <h2>Something{"'"}s Going Wrong</h2>
         </section>
       )}
       <footer className={styles.footer}>
-        {references.map((reference) => (
-          <div key={reference.title} className={styles.reference}>
-            <div>
-              <a href={reference.url} target="_blank">
-                {reference.title}
-              </a>
-              {reference.author && <div>by {reference.author}</div>}
-              {reference.platform && <div>on {reference.platform}</div>}
-            </div>
+        <div data-title="References" className={styles.reference}>
+          <div>
+            {references.map((reference) => {
+              let linkText = `@${reference.title}`;
+              if (reference.author) linkText += ` by ${reference.author}`;
+              if (reference.platform) linkText += ` on ${reference.platform}`;
+
+              return (
+                <a key={reference.title} href={reference.url} target="_blank">
+                  {linkText}
+                </a>
+              );
+            })}
           </div>
-        ))}
+        </div>
       </footer>
     </main>
   );
