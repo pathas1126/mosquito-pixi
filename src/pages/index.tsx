@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { GetServerSidePropsContext } from 'next';
 import { useEffect, useRef, useState } from 'react';
 import localFont from 'next/font/local';
+import useMobile from '@/hooks/useMobile';
 
 const cyberpunk = localFont({ src: './fonts/Cyberpunk.ttf' });
 const blenderProBook = localFont({ src: './fonts/BlenderPro-Book.woff2' });
@@ -26,6 +27,8 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
   const [mosquitos, setMosquitos] = useState<{ length: number; index: number; backgroundImage: string; title: string }[]>([]);
   const [date, setDate] = useState('');
   const refMosquitoSection = useRef<HTMLDivElement>(null);
+
+  const isMobile = useMobile();
 
   useEffect(() => {
     if (!mosquitoStatus) return;
@@ -59,7 +62,9 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
   return (
     <main className={styles.main} id="home">
       <header className={styles.header}>
-        <h2 className={cyberpunk.className}>We-ing We-ing</h2>
+        <h2 className={cyberpunk.className} style={{ fontSize: isMobile ? '2rem' : '2.5rem' }}>
+          We-ing We-ing
+        </h2>
         <h6 className={blenderProBook.className}>{date || '-'} Seoul Mosquito Index</h6>
       </header>
       {mosquitoStatus ? (
