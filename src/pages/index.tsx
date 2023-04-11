@@ -30,7 +30,6 @@ interface IProps {
 const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
   const [mosquitos, setMosquitos] = useState<{ length: number; index: number; backgroundImage: string; title: string }[]>([]);
   const [date, setDate] = useState('');
-  const refMosquitoSection = useRef<HTMLDivElement>(null);
 
   const isMobile = useMobile();
 
@@ -69,27 +68,23 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    centerMode: true,
-    adaptiveHeight: true,
   };
 
   return (
     <main className={styles.main} id="home">
       <header className={styles.header}>
-        <h2 className={cyberpunk.className} style={{ fontSize: isMobile ? '2rem' : '2.5rem' }}>
-          We-ing We-ing
-        </h2>
+        <h2 className={cyberpunk.className}>We-ing We-ing</h2>
         <h6 className={blenderProBook.className}>{date || '-'} Seoul Mosquito Index</h6>
       </header>
-      {mosquitoStatus ? (
-        <section className={styles['mosquito-section']} ref={refMosquitoSection}>
-          <div className={`${styles.palette} ${blenderProBook.className}`}>
-            {['Good', 'Concern', 'Attention', 'Horrible'].map((step) => (
-              <span key={step}>{step}</span>
-            ))}
-          </div>
-          {isMobile ? (
-            <div style={{ width: '100%', height: '100%' }}>
+      <div className={styles['section-wrapper']}>
+        <div className={`${styles.palette} ${blenderProBook.className}`}>
+          {['Good', 'Concern', 'Attention', 'Horrible'].map((step) => (
+            <span key={step}>{step}</span>
+          ))}
+        </div>
+        {mosquitoStatus ? (
+          isMobile ? (
+            <div className={styles['container-slider']}>
               <Slider {...sliderSettings}>
                 {mosquitos.map((mosquito, index) => (
                   <article className={`${styles['mosquito-wrapper']} ${styles[getBackgroundClassName(mosquito.index)]}`} key={index}>
@@ -97,7 +92,6 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
                       <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} />
                     </div>
                     <span className={styles['mosquito-info']} data-title={mosquito.title}>
-                      {/* <h3>{mosquito.title}</h3> */}
                       Mosquito Index: {mosquito.index}
                     </span>
                   </article>
@@ -105,24 +99,26 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
               </Slider>
             </div>
           ) : (
-            mosquitos.map((mosquito, index) => (
-              <article className={`${styles['mosquito-wrapper']} ${styles[getBackgroundClassName(mosquito.index)]}`} key={index}>
-                <div className={styles['mosquito-rectangle']}>
-                  <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} />
-                </div>
-                <span className={styles['mosquito-info']} data-title={mosquito.title}>
-                  {/* <h3>{mosquito.title}</h3> */}
-                  Mosquito Index: {mosquito.index}
-                </span>
-              </article>
-            ))
-          )}
-        </section>
-      ) : (
-        <section className={`${styles['mosquito-section-no-data']} ${cyberpunk.className}`}>
-          <h2>Something{"'"}s Going Wrong</h2>
-        </section>
-      )}
+            <section className={styles['mosquito-section']}>
+              {mosquitos.map((mosquito, index) => (
+                <article className={`${styles['mosquito-wrapper']} ${styles[getBackgroundClassName(mosquito.index)]}`} key={index}>
+                  <div className={styles['mosquito-rectangle']}>
+                    <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} />
+                  </div>
+                  <span className={styles['mosquito-info']} data-title={mosquito.title}>
+                    {/* <h3>{mosquito.title}</h3> */}
+                    Mosquito Index: {mosquito.index}
+                  </span>
+                </article>
+              ))}
+            </section>
+          )
+        ) : (
+          <section className={`${styles['mosquito-section-no-data']} ${cyberpunk.className}`}>
+            <h2>Something{"'"}s Going Wrong</h2>
+          </section>
+        )}
+      </div>
       <footer className={styles.footer}>
         <div data-title="References" className={styles.reference}>
           <div>

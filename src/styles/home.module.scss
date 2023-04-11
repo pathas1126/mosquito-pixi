@@ -14,9 +14,13 @@ $color-concern: #5269DD;
 $color-attention: #E43681;
 $color-horrible: #6C193D;
 
-$height-header: 140px;
+$height-header: 130px;
 $height-footer: 90px;
 $height-main: calc(100% - ($height-header + $height-footer));
+$height-palette: 25px;
+$margin-palette: 10px;
+$height-section: calc(100% - ($height-palette + $margin-palette));
+
 
 .main {
   width: 100%;
@@ -42,7 +46,8 @@ $height-main: calc(100% - ($height-header + $height-footer));
 
   h2 {
    color: $color-yellow;
-   padding: 1rem 2.5rem;
+   padding: 0 0 1rem 0;
+   font-size: 2.5rem;
    border-radius: 0.5rem;
    letter-spacing: 0.1rem;
    font-weight: 600;
@@ -51,7 +56,7 @@ $height-main: calc(100% - ($height-header + $height-footer));
 
   h6 {
    color: #ffffff;
-   font-size: 1.125rem;
+   font-size: 1rem;
    font-weight: 600;
   
   }
@@ -75,10 +80,16 @@ $height-main: calc(100% - ($height-header + $height-footer));
   }
 }
 
+.section-wrapper {
+  width: 100%;
+  height: $height-main;
+}
+
 .palette {
-  margin-top:0.5rem;
-  width: 90%;
-  height: fit-content;
+  width: 80%;
+  height: $height-palette;
+  margin: 0 auto;
+  margin-bottom: $margin-palette;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -97,21 +108,29 @@ $height-main: calc(100% - ($height-header + $height-footer));
   }
 }
 
+.container-slider {
+  padding: 1rem 2.5rem;
+  width: 100%;
+  height: $height-section;
+  display: inline-block;
+}
+
+
 .mosquito-section {
   width: 100%;
   background: $color-yellow;
-  height: $height-main;
+  height: $height-section;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-
+  overflow: hidden;
 }
 
 .mosquito-section-no-data {
   width: 100%;
   background: $color-yellow;
-  height: $height-main;
+  height: $height-section;
   padding: 2rem 0;
   display: flex;
   flex-direction: column;
@@ -132,10 +151,9 @@ $height-main: calc(100% - ($height-header + $height-footer));
 }
 
 
-
 .mosquito-wrapper {
-  width: 95%;
-  height: 30%;
+  width: 90%;
+  height: 33%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -181,7 +199,7 @@ $height-main: calc(100% - ($height-header + $height-footer));
   width: 90%;
   height: 18%;
   display: flex;
-  padding: 0.3rem 0.4rem 0.2rem;
+  padding: 0.25rem 0.875rem 0.2rem;
   justify-content: space-between;
 
   clip-path: polygon(0 0, 0 100%, calc(100% - 20px) 100%, 100% calc(100% - 20px), 100% 0);
@@ -192,7 +210,7 @@ $height-main: calc(100% - ($height-header + $height-footer));
  
   &::before {
     content: attr(data-title);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     display: block;
     color: $color-yellow;
     text-shadow: $color-cyan 1px 1px;
