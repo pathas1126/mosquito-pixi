@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import localFont from 'next/font/local';
 
 const cyberpunk = localFont({ src: './fonts/Cyberpunk.ttf' });
+const blenderProBook = localFont({ src: './fonts/BlenderPro-Book.woff2' });
 
 const references = [
   {
@@ -72,13 +73,13 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     <main className={styles.main} id="home">
       <header className={styles.header}>
         <h2 className={cyberpunk.className}>We-ing We-ing</h2>
-        <h6>{date || '-'} 서울 모기 지수</h6>
-        <div className={styles.palette}>
+        <h6 className={blenderProBook.className}>{date || '-'} Seoul Mosquito Index</h6>
+        {/* <div className={styles.palette}>
           <div>쾌적</div>
           <div>관심</div>
           <div>주의</div>
           <div>불쾌</div>
-        </div>
+        </div> */}
       </header>
       {mosquitoStatus ? (
         <section className={styles['mosquito-section']} ref={refMosquitoSection}>
