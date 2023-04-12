@@ -1,5 +1,6 @@
 import localFont from 'next/font/local';
 import styles from './alert.module.scss';
+import { useEffect } from 'react';
 
 interface IProps {
   closeAlert: () => void;
@@ -10,6 +11,16 @@ const Alert: React.FC<IProps> = ({ closeAlert, text }) => {
   const handleWrapperClick = () => {
     closeAlert();
   };
+
+  const playReceiveSound = () => new Audio('/sounds/receive.mp3').play();
+  const playCloseSound = () => new Audio('/sounds/close.mp3').play();
+
+  useEffect(() => {
+    playReceiveSound();
+    return () => {
+      playCloseSound();
+    };
+  }, []);
 
   return (
     <section className={styles['alert-wrapper']} onClick={handleWrapperClick}>

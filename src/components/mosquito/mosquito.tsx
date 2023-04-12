@@ -41,6 +41,8 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
     if (navigator.vibrate) navigator.vibrate(ms);
   };
 
+  const playAttackSound = () => new Audio('/sounds/attack.mp3').play();
+
   const getMosquitoes = useCallback(
     ({ texture, length, pixi }: { texture: PIXI.Texture; length: number; pixi: PIXI.Application }) => {
       const moiquitoes = new Array(length).fill(0).map(() => {
@@ -64,9 +66,10 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
           spriteBlood.position.x = event.screen.x;
           spriteBlood.position.y = event.screen.y;
           pixi.stage.addChild(spriteBlood);
+          playAttackSound();
           callVibrate();
-          onKillMosquito();
           mosquito.visible = false;
+          onKillMosquito();
         });
         return mosquito;
       });

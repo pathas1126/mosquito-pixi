@@ -60,11 +60,20 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
 
     switch (killedMosquitoLength) {
       case 1:
+        playBackgroundSound();
         return setAlertText('Mission: Catch all mosquitoes.');
       case totalMosquitoLength:
+        playCompleteSound();
         return setAlertText('Mission Complete.');
     }
   }, [killedMosquitoLength, totalMosquitoLength]);
+
+  const playBackgroundSound = () => {
+    const audio = new Audio('/sounds/stars.mp3');
+    audio.loop = true;
+    audio.play();
+  };
+  const playCompleteSound = () => new Audio('/sounds/complete.mp3').play();
 
   const getMosquitoesLength = (indexString: string) => {
     const index = Number(indexString);
