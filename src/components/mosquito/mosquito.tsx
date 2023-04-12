@@ -60,7 +60,7 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
           spriteBlood.position.x = event.screen.x;
           spriteBlood.position.y = event.screen.y;
           pixi.stage.addChild(spriteBlood);
-          vibrate();
+          vibrate(20);
           playAttackSound();
           mosquito.visible = false;
           onKillMosquito();
