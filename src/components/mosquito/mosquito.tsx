@@ -34,58 +34,67 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
     return { xPaths: xPathsRandom, yPaths: yPathsRandom };
   };
 
-  const getMosquitos = useCallback(({ texture, length, pixi }: { texture: PIXI.Texture; length: number; pixi: PIXI.Application }) => {
-    const moiquitos = new Array(length).fill(0).map(() => {
-      const mosquito = new PIXI.Sprite(texture);
-      mosquito.interactive = true;
-      mosquito.hitArea = new PIXI.Circle(mosquito.x, mosquito.y, 500);
+  const callVibrate = (ms = 20) => {
+    //@ts-ignore
+    navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 
-      mosquito.cursor = 'pointer';
-      mosquito.zIndex = 1;
-      mosquito.width = 30;
-      mosquito.height = 30;
-      mosquito.filters = [new DropShadowFilter()];
-      mosquito.on('pointerdown', (event) => {
-        const textureBlood = PIXI.Texture.from('blood.png');
-        const spriteBlood = new PIXI.Sprite(textureBlood);
-        spriteBlood.width = 45;
-        spriteBlood.height = 45;
-        spriteBlood.anchor.set(0.5);
-        spriteBlood.angle = Math.ceil(Math.random() * 360);
-        spriteBlood.zIndex = 0;
-        spriteBlood.position.x = event.screen.x;
-        spriteBlood.position.y = event.screen.y;
-        pixi.stage.addChild(spriteBlood);
+    if (navigator.vibrate) navigator.vibrate(ms);
+  };
 
-        onKillMosquito();
-        mosquito.visible = false;
+  const getMosquitoes = useCallback(
+    ({ texture, length, pixi }: { texture: PIXI.Texture; length: number; pixi: PIXI.Application }) => {
+      const moiquitoes = new Array(length).fill(0).map(() => {
+        const mosquito = new PIXI.Sprite(texture);
+        mosquito.interactive = true;
+        mosquito.hitArea = new PIXI.Circle(mosquito.x, mosquito.y, 500);
+
+        mosquito.cursor = 'pointer';
+        mosquito.zIndex = 1;
+        mosquito.width = 30;
+        mosquito.height = 30;
+        mosquito.filters = [new DropShadowFilter()];
+        mosquito.on('pointerdown', (event) => {
+          const textureBlood = PIXI.Texture.from('blood.png');
+          const spriteBlood = new PIXI.Sprite(textureBlood);
+          spriteBlood.width = 45;
+          spriteBlood.height = 45;
+          spriteBlood.anchor.set(0.5);
+          spriteBlood.angle = Math.ceil(Math.random() * 360);
+          spriteBlood.zIndex = 0;
+          spriteBlood.position.x = event.screen.x;
+          spriteBlood.position.y = event.screen.y;
+          pixi.stage.addChild(spriteBlood);
+          callVibrate();
+          onKillMosquito();
+          mosquito.visible = false;
+        });
+        return mosquito;
       });
-      return mosquito;
-    });
 
-    return moiquitos;
-  }, []);
+      return moiquitoes;
+    },
+    [onKillMosquito],
+  );
 
   const animate = ({
     xPaths,
     yPaths,
-    mosquitos,
+    mosquitoes,
     pixi,
     time,
   }: {
     xPaths: number[][];
     yPaths: number[][];
-    mosquitos: PIXI.Sprite[];
+    mosquitoes: PIXI.Sprite[];
     pixi: PIXI.Application<PIXI.ICanvas>;
     time: number;
   }) => {
-    mosquitos.forEach((mosquito, index) => {
+    mosquitoes.forEach((mosquito, index) => {
       pixi.stage.addChild(mosquito);
       new TWEEDLE.Tween(mosquito)
         .from({ x: xPaths[index][0], y: yPaths[index][0] })
         .to({ x: xPaths[index], y: yPaths[index] }, time)
         .repeat(Infinity)
-        .yoyo()
         .interpolation(TWEEDLE.Interpolation.Geom.CatmullRom)
         .start();
     });
@@ -145,12 +154,12 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
       pointLength: pathPointLength,
     });
 
-    const mosquitos = getMosquitos({ texture, length: mosquitoLength, pixi });
+    const mosquitoes = getMosquitoes({ texture, length: mosquitoLength, pixi });
 
-    animate({ mosquitos, pixi, time: TIME, xPaths, yPaths });
+    animate({ mosquitoes, pixi, time: TIME, xPaths, yPaths });
 
-    // showAuxGraphics({ xPaths, yPaths, pixi });
-  }, [pixi, mosquitoLength, pathPointLength, backgroundImage, getMosquitos]);
+    showAuxGraphics({ xPaths, yPaths, pixi });
+  }, [pixi, mosquitoLength, pathPointLength, backgroundImage, getMosquitoes]);
 
   return <div className={styles.main} ref={refWrapper}></div>;
 };

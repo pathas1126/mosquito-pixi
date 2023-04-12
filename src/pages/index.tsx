@@ -55,6 +55,17 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     ]);
   }, [mosquitoStatus]);
 
+  useEffect(() => {
+    if (!killedMosquitoLength) return;
+
+    switch (killedMosquitoLength) {
+      case 1:
+        return setAlertText('Mission: Catch all mosquitoes.');
+      case totalMosquitoLength:
+        return setAlertText('Mission Complete.');
+    }
+  }, [killedMosquitoLength, totalMosquitoLength]);
+
   const getMosquitosLength = (indexString: string) => {
     const index = Number(indexString);
     const roundedIndex = Math.round(index);
@@ -74,11 +85,13 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     setKilledMosquitoLength((prev) => prev + 1);
   }, []);
 
+  const leftMosquitoLength = totalMosquitoLength - killedMosquitoLength;
+
   return (
     <main className={styles.main} id="home">
       {!!alertText && <Alert closeAlert={closeAlert} text={alertText} />}
       <header className={styles.header}>
-        <h2 className={fontCyberpunk.className}>We-ing We-ing</h2>
+        <h2 className={fontCyberpunk.className}>{!!killedMosquitoLength ? (leftMosquitoLength ? leftMosquitoLength : 'Misson Clear!') : 'We-ing We-ing'}</h2>
         <h6 className={fontBlenderProBook.className}>
           {date || '-'} Seoul Mosquito Index<span className={styles['cyber-glitch']}>_</span>
         </h6>
@@ -105,7 +118,7 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
                   >
                     {title}
                     <span className={styles['glitch-text']}>throw err;</span>
-                    <span className={styles.tag}></span>
+                    <span className={styles.tag} />
                   </button>
                 ))}
               </div>
