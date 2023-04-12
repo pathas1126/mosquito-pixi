@@ -70,6 +70,7 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
 
   const playBackgroundSound = () => {
     const audio = new Audio('/sounds/stars.mp3');
+    audio.volume = 0.4;
     audio.loop = true;
     audio.play();
   };

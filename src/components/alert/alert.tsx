@@ -1,6 +1,7 @@
 import localFont from 'next/font/local';
 import styles from './alert.module.scss';
 import { useEffect } from 'react';
+import { vibrate } from '@/utils/vibrate';
 
 interface IProps {
   closeAlert: () => void;
@@ -16,6 +17,7 @@ const Alert: React.FC<IProps> = ({ closeAlert, text }) => {
   const playCloseSound = () => new Audio('/sounds/close.mp3').play();
 
   useEffect(() => {
+    vibrate(30);
     playReceiveSound();
     return () => {
       playCloseSound();

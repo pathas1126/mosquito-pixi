@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as TWEEDLE from 'tweedle.js';
 import { DropShadowFilter } from '@pixi/filter-drop-shadow';
+import { vibrate } from '@/utils/vibrate';
 
 interface IProps {
   mosquitoLength: number;
@@ -34,13 +35,6 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
     return { xPaths: xPathsRandom, yPaths: yPathsRandom };
   };
 
-  const callVibrate = (ms = 20) => {
-    //@ts-ignore
-    navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-
-    if (navigator.vibrate) navigator.vibrate(ms);
-  };
-
   const playAttackSound = () => new Audio('/sounds/attack.mp3').play();
 
   const getMosquitoes = useCallback(
@@ -66,7 +60,7 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
           spriteBlood.position.x = event.screen.x;
           spriteBlood.position.y = event.screen.y;
           pixi.stage.addChild(spriteBlood);
-          callVibrate();
+          vibrate();
           playAttackSound();
           mosquito.visible = false;
           onKillMosquito();
