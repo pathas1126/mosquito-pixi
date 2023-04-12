@@ -46,6 +46,7 @@ $height-section: calc(100% - ($height-palette + $margin-palette));
   background: $color-yellow;
   flex-direction: column;
   align-items: center;  
+  position: relative;
 }
 
 

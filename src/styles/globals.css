@@ -107,6 +107,17 @@ menu,
 nav,
 section {
   display: block;
+  --color-yellow: #f8ef02;
+  --color-cyan: #00ffd2;
+  --color-cyan1: #46dffb;
+  --color-cyan2: #45aefb;
+  --color-black: #000000;
+  --color-dark: #333333;
+  --color-green: #446d44;
+  --color-blue: #136377;
+  --color-purple: #800080;
+  --color-red: #ff003c;
+  --color-white: #ffffff;
 }
 
 body {
