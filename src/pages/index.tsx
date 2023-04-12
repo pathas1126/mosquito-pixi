@@ -25,7 +25,7 @@ interface IProps {
 }
 
 const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
-  const [mosquitos, setMosquitos] = useState<{ length: number; index: number; backgroundImage: string; title: string; buttonClassName: string }[]>([]);
+  const [mosquitoes, setMosquitoes] = useState<{ length: number; index: number; backgroundImage: string; title: string; buttonClassName: string }[]>([]);
   const [totalMosquitoLength, setTotalMosquitoLength] = useState(0);
   const [killedMosquitoLength, setKilledMosquitoLength] = useState(0);
 
@@ -42,16 +42,16 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
 
     setDate(mosquitoStatus.MOSQUITO_DATE);
 
-    const { mosquitosLength: mosquitosParkLength, index: mosquitosParkIndex } = getMosquitosLength(mosquitoStatus.MOSQUITO_VALUE_PARK);
-    const { mosquitosLength: mosquitosWaterLength, index: mosquitosWaterIndex } = getMosquitosLength(mosquitoStatus.MOSQUITO_VALUE_WATER);
-    const { mosquitosLength: mosquitosHouseLength, index: mosquitosHouseIndex } = getMosquitosLength(mosquitoStatus.MOSQUITO_VALUE_HOUSE);
+    const { mosquitoesLength: mosquitoesParkLength, index: mosquitoesParkIndex } = getMosquitoesLength(mosquitoStatus.MOSQUITO_VALUE_PARK);
+    const { mosquitoesLength: mosquitoesWaterLength, index: mosquitoesWaterIndex } = getMosquitoesLength(mosquitoStatus.MOSQUITO_VALUE_WATER);
+    const { mosquitoesLength: mosquitoesHouseLength, index: mosquitoesHouseIndex } = getMosquitoesLength(mosquitoStatus.MOSQUITO_VALUE_HOUSE);
 
-    setTotalMosquitoLength(mosquitosParkLength + mosquitosWaterLength + mosquitosHouseLength);
+    setTotalMosquitoLength(mosquitoesParkLength + mosquitoesWaterLength + mosquitoesHouseLength);
 
-    setMosquitos([
-      { title: 'Park', length: mosquitosParkLength, index: mosquitosParkIndex, backgroundImage: 'grid_park.png', buttonClassName: 'bg-green' },
-      { title: 'Water', length: mosquitosWaterLength, index: mosquitosWaterIndex, backgroundImage: 'grid_water.png', buttonClassName: 'bg-blue' },
-      { title: 'Residence', length: mosquitosHouseLength, index: mosquitosHouseIndex, backgroundImage: 'grid_residence.png', buttonClassName: 'bg-purple' },
+    setMosquitoes([
+      { title: 'Park', length: mosquitoesParkLength, index: mosquitoesParkIndex, backgroundImage: 'grid_park.png', buttonClassName: 'bg-green' },
+      { title: 'Water', length: mosquitoesWaterLength, index: mosquitoesWaterIndex, backgroundImage: 'grid_water.png', buttonClassName: 'bg-blue' },
+      { title: 'Residence', length: mosquitoesHouseLength, index: mosquitoesHouseIndex, backgroundImage: 'grid_residence.png', buttonClassName: 'bg-purple' },
     ]);
   }, [mosquitoStatus]);
 
@@ -66,10 +66,10 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     }
   }, [killedMosquitoLength, totalMosquitoLength]);
 
-  const getMosquitosLength = (indexString: string) => {
+  const getMosquitoesLength = (indexString: string) => {
     const index = Number(indexString);
     const roundedIndex = Math.round(index);
-    return { mosquitosLength: roundedIndex, index };
+    return { mosquitoesLength: roundedIndex, index };
   };
 
   const getTileBackgroundClassName = (index: number) => {
@@ -106,7 +106,7 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
           isMobile ? (
             <div className={styles['mosquito-section-mobile']}>
               <div className={styles['mosquito-slide-button-wrapper']}>
-                {mosquitos.map(({ title, buttonClassName }, index) => (
+                {mosquitoes.map(({ title, buttonClassName }, index) => (
                   <button
                     key={title}
                     className={`${styles['cyber-button']} ${styles[buttonClassName]}`}
@@ -123,7 +123,7 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
                 ))}
               </div>
               <div className={styles['mosquito-slide-wrapper']} ref={refMosquitoSlide}>
-                {mosquitos.map((mosquito, index) => (
+                {mosquitoes.map((mosquito, index) => (
                   <div key={index} className={styles['mosquito-mobile-wrapper']}>
                     <article className={`${styles['mosquito-mobile']} ${styles[getTileBackgroundClassName(mosquito.index)]}`}>
                       <div className={styles['mosquito-rectangle']}>
@@ -139,7 +139,7 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
             </div>
           ) : (
             <section className={styles['mosquito-section']}>
-              {mosquitos.map((mosquito, index) => (
+              {mosquitoes.map((mosquito, index) => (
                 <article className={`${styles['mosquito-wrapper']} ${styles[getTileBackgroundClassName(mosquito.index)]}`} key={index}>
                   <div className={styles['mosquito-rectangle']}>
                     <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} onKillMosquito={killMosquito} />

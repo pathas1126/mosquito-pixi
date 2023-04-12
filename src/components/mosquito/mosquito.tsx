@@ -158,7 +158,7 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
 
     animate({ mosquitoes, pixi, time: TIME, xPaths, yPaths });
 
-    showAuxGraphics({ xPaths, yPaths, pixi });
+    // showAuxGraphics({ xPaths, yPaths, pixi });
   }, [pixi, mosquitoLength, pathPointLength, backgroundImage, getMosquitoes]);
 
   return <div className={styles.main} ref={refWrapper}></div>;
