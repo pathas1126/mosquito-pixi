@@ -11,7 +11,7 @@ interface IProps {
 }
 
 const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPointLength = 10 }) => {
-  const [pixi, setPixi] = useState<PIXI.Application<PIXI.ICanvas>>();
+  const [pixi, setPixi] = useState<PIXI.Application<PIXI.ICanvas> | null>(null);
   const refWrapper = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -26,6 +26,13 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
 
       setPixi(app);
     }
+
+    return () => {
+      if (pixi) {
+        pixi.destroy();
+        setPixi(null);
+      }
+    };
   }, [pixi]);
 
   useEffect(() => {

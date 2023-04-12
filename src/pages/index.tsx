@@ -5,13 +5,9 @@ import { GetServerSidePropsContext } from 'next';
 import { useEffect, useRef, useState } from 'react';
 import localFont from 'next/font/local';
 import useMobile from '@/hooks/useMobile';
-import Slider from 'react-slick';
-import { Settings } from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 
-const cyberpunk = localFont({ src: './fonts/Cyberpunk.ttf' });
-const blenderProBook = localFont({ src: './fonts/BlenderPro-Book.woff2' });
+const fontCyberpunk = localFont({ src: './fonts/Cyberpunk.ttf' });
+const fontBlenderProBook = localFont({ src: './fonts/BlenderPro-Book.woff2' });
 
 const references = [
   { url: 'http://data.seoul.go.kr/dataList/OA-13285/S/1/datasetView.do', title: 'Seoul Mosquito Index', platform: 'Seoul' },
@@ -28,8 +24,9 @@ interface IProps {
 }
 
 const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
-  const [mosquitos, setMosquitos] = useState<{ length: number; index: number; backgroundImage: string; title: string }[]>([]);
+  const [mosquitos, setMosquitos] = useState<{ length: number; index: number; backgroundImage: string; title: string; buttonClassName: string }[]>([]);
   const [date, setDate] = useState('');
+  const refMosquitoSlide = useRef<HTMLDivElement | null>(null);
 
   const isMobile = useMobile();
 
@@ -43,9 +40,9 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     const { mosquitosLength: mosquitosHouseLength, index: mosquitosHouseIndex } = getMosquitosLength(mosquitoStatus.MOSQUITO_VALUE_HOUSE);
 
     setMosquitos([
-      { title: 'Park', length: mosquitosParkLength, index: mosquitosParkIndex, backgroundImage: 'grid_park.png' },
-      { title: 'Water', length: mosquitosWaterLength, index: mosquitosWaterIndex, backgroundImage: 'grid_water.png' },
-      { title: 'Residence', length: mosquitosHouseLength, index: mosquitosHouseIndex, backgroundImage: 'grid_residence.png' },
+      { title: 'Park', length: mosquitosParkLength, index: mosquitosParkIndex, backgroundImage: 'grid_park.png', buttonClassName: 'bg-green' },
+      { title: 'Water', length: mosquitosWaterLength, index: mosquitosWaterIndex, backgroundImage: 'grid_water.png', buttonClassName: 'bg-blue' },
+      { title: 'Residence', length: mosquitosHouseLength, index: mosquitosHouseIndex, backgroundImage: 'grid_residence.png', buttonClassName: 'bg-purple' },
     ]);
   }, [mosquitoStatus]);
 
@@ -55,58 +52,70 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     return { mosquitosLength: roundedIndex, index };
   };
 
-  const getBackgroundClassName = (index: number) => {
+  const getTileBackgroundClassName = (index: number) => {
     if (index >= 75) return 'horrible';
     if (index >= 50) return 'attention';
     if (index >= 25) return 'concern';
     return 'good';
   };
 
-  const sliderSettings: Settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
-
   return (
     <main className={styles.main} id="home">
       <header className={styles.header}>
-        <h2 className={cyberpunk.className}>We-ing We-ing</h2>
-        <h6 className={blenderProBook.className}>{date || '-'} Seoul Mosquito Index</h6>
+        <h2 className={fontCyberpunk.className}>We-ing We-ing</h2>
+        <h6 className={fontBlenderProBook.className}>
+          {date || '-'} Seoul Mosquito Index<span className={styles['cyber-glitch']}>_</span>
+        </h6>
       </header>
       <div className={styles['section-wrapper']}>
-        <div className={`${styles.palette} ${blenderProBook.className}`}>
+        <div className={`${styles.palette} ${fontBlenderProBook.className}`}>
           {['Good', 'Concern', 'Attention', 'Horrible'].map((step) => (
             <span key={step}>{step}</span>
           ))}
         </div>
         {mosquitoStatus ? (
           isMobile ? (
-            <div className={styles['container-slider']}>
-              <Slider {...sliderSettings}>
-                {mosquitos.map((mosquito, index) => (
-                  <article className={`${styles['mosquito-wrapper']} ${styles[getBackgroundClassName(mosquito.index)]}`} key={index}>
-                    <div className={styles['mosquito-rectangle']}>
-                      <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} />
-                    </div>
-                    <span className={styles['mosquito-info']} data-title={mosquito.title}>
-                      Mosquito Index: {mosquito.index}
-                    </span>
-                  </article>
+            <div className={styles['mosquito-section-mobile']}>
+              <div className={styles['mosquito-slide-button-wrapper']}>
+                {mosquitos.map(({ title, buttonClassName }, index) => (
+                  <button
+                    key={title}
+                    className={`${styles['cyber-button']} ${styles[buttonClassName]}`}
+                    onClick={() => {
+                      if (!refMosquitoSlide.current) return;
+                      const moveWidth = refMosquitoSlide.current.children[0]?.clientWidth;
+                      refMosquitoSlide.current.style.left = `-${index * moveWidth}px`;
+                    }}
+                  >
+                    {title}
+                    <span className={styles['glitch-text']}>throw err;</span>
+                    <span className={styles.tag}></span>
+                  </button>
                 ))}
-              </Slider>
+              </div>
+              <div className={styles['mosquito-slide-wrapper']} ref={refMosquitoSlide}>
+                {mosquitos.map((mosquito, index) => (
+                  <div key={index} className={styles['mosquito-mobile-wrapper']}>
+                    <article className={`${styles['mosquito-mobile']} ${styles[getTileBackgroundClassName(mosquito.index)]}`}>
+                      <div className={styles['mosquito-rectangle']}>
+                        <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} />
+                      </div>
+                      <span className={styles['mosquito-info']} data-title={mosquito.title}>
+                        Mosquito Index: {mosquito.index}
+                      </span>
+                    </article>
+                  </div>
+                ))}
+              </div>
             </div>
           ) : (
             <section className={styles['mosquito-section']}>
               {mosquitos.map((mosquito, index) => (
-                <article className={`${styles['mosquito-wrapper']} ${styles[getBackgroundClassName(mosquito.index)]}`} key={index}>
+                <article className={`${styles['mosquito-wrapper']} ${styles[getTileBackgroundClassName(mosquito.index)]}`} key={index}>
                   <div className={styles['mosquito-rectangle']}>
                     <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} />
                   </div>
                   <span className={styles['mosquito-info']} data-title={mosquito.title}>
-                    {/* <h3>{mosquito.title}</h3> */}
                     Mosquito Index: {mosquito.index}
                   </span>
                 </article>
@@ -114,7 +123,7 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
             </section>
           )
         ) : (
-          <section className={`${styles['mosquito-section-no-data']} ${cyberpunk.className}`}>
+          <section className={`${styles['mosquito-section-no-data']} ${fontCyberpunk.className}`}>
             <h2>Something{"'"}s Going Wrong</h2>
           </section>
         )}
