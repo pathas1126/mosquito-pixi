@@ -17,7 +17,7 @@ const Alert: React.FC<IProps> = ({ closeAlert, text }) => {
   const playCloseSound = () => new Audio('/sounds/close.mp3').play();
 
   useEffect(() => {
-    vibrate(30);
+    vibrate(50);
     playReceiveSound();
     return () => {
       playCloseSound();
