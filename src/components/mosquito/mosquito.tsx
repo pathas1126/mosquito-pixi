@@ -20,8 +20,9 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
     if (!mainElement) return;
     if (!pixi) {
       const app = new PIXI.Application({ resizeTo: mainElement });
+      app.stage.sortableChildren = true;
+
       mainElement.appendChild(app.view as any);
-      app.ticker.add(() => TWEEDLE.Group.shared.update());
 
       setPixi(app);
     }
@@ -76,13 +77,20 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
     const moiquitos = new Array(length).fill(0).map(() => {
       const mosquito = new PIXI.Sprite(texture);
       mosquito.interactive = true;
+      mosquito.hitArea = new PIXI.Circle(mosquito.x, mosquito.y, 500);
+
       mosquito.cursor = 'pointer';
       mosquito.zIndex = 1;
+      mosquito.width = 30;
+      mosquito.height = 30;
+      mosquito.filters = [new DropShadowFilter()];
       mosquito.on('pointerdown', (event) => {
         const textureBlood = PIXI.Texture.from('blood.png');
         const spriteBlood = new PIXI.Sprite(textureBlood);
         spriteBlood.width = 45;
         spriteBlood.height = 45;
+        spriteBlood.anchor.set(0.5);
+        spriteBlood.angle = Math.ceil(Math.random() * 360);
         spriteBlood.zIndex = 0;
         spriteBlood.position.x = event.screen.x;
         spriteBlood.position.y = event.screen.y;
@@ -90,9 +98,6 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
 
         mosquito.visible = false;
       });
-      mosquito.width = 30;
-      mosquito.height = 30;
-      mosquito.filters = [new DropShadowFilter()];
       return mosquito;
     });
 
@@ -118,9 +123,12 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
         .from({ x: xPaths[index][0], y: yPaths[index][0] })
         .to({ x: xPaths[index], y: yPaths[index] }, time)
         .repeat(Infinity)
+        .yoyo()
         .interpolation(TWEEDLE.Interpolation.Geom.CatmullRom)
         .start();
     });
+
+    pixi.ticker.add(() => TWEEDLE.Group.shared.update());
   };
 
   const showAuxGraphics = ({ xPaths, yPaths, pixi }: { xPaths: number[][]; yPaths: number[][]; pixi: PIXI.Application<PIXI.ICanvas> }) => {
