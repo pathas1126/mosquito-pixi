@@ -331,8 +331,8 @@ $button-clip-7: polygon(0 63%, 100% 63%, 100% 80%, 95% 80%, 95% 80%, 85% 80%, 85
 $button-cutout: 1.1rem;
 $button-clip: polygon(0 0, 100% 0, 100% 100%, 95% 100%, 95% 90%, 80% 90%, 80% 100%, $button-cutout 100%, 0 calc(100% - $button-cutout));
 $button-shimmy-distance: 5;
-$button-padding-v: 0.8rem;
-$button-padding-h: 1.6rem;
+$button-padding-v: 0.725rem;
+$button-padding-h: 1.25rem;
 
 
 .cyber-button {
@@ -517,7 +517,8 @@ $button-padding-h: 1.6rem;
   width: 100%;
   height: 15%;
   display: flex;
-  justify-content: space-around;
+  padding: 0 1rem;
+  justify-content: space-between;
   align-items: center;
 }
 
