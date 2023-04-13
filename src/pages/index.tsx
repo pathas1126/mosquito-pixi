@@ -82,10 +82,11 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
             } = result;
 
             const formattedRecord = getFormattedTime(record);
+            const winner = isMe ? 'You' : 'Someone';
 
             completeText += `\r\n\r\nToday's Champion`;
             completeText += `\r\n> `;
-            completeText += !isMe ? `[Me] ${formattedRecord}` : `[${ip}] ${formattedRecord}`;
+            completeText += `[${winner}] ${formattedRecord}`;
 
             setAlertText(completeText);
           })
@@ -136,7 +137,11 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     <main className={styles.main} id="home">
       {!!alertText && <Alert closeAlert={closeAlert} text={alertText} />}
       <header className={styles.header}>
-        <h2 className={fontCyberpunk.className}>{title}</h2>
+        {loading ? (
+          <h2 className={[fontCyberpunk.className, styles['cyber-glitch-4']].join(' ')}>Loading...</h2>
+        ) : (
+          <h2 className={fontCyberpunk.className}>{title}</h2>
+        )}
         <h6 className={fontBlenderProBook.className}>
           {date || ''} Seoul Mosquito Index<span className={styles['cyber-glitch']}>_</span>
           {!!seconds.value && seconds.formatted}

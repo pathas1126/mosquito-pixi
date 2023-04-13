@@ -500,6 +500,112 @@ $button-padding-h: 1.25rem;
   }
 }
 
+.cyber-glitch-4 {
+  animation: cyber-glitch-4 2s linear infinite;
+}
+
+@keyframes cyber-glitch-4 {
+  0% {
+    visibility: visible;
+  }
+
+  1% {
+    visibility: hidden;
+  }
+
+  2% {
+    visibility: hidden;
+  }
+
+  3% {
+    visibility: visible;
+  }
+
+  20% {
+    visibility: visible;
+  }
+
+  21% {
+    visibility: hidden;
+  }
+
+  24% {
+    visibility: hidden;
+  }
+
+  25% {
+    visibility: visible;
+  }
+
+  40% {
+    visibility: visible;
+  }
+
+  41% {
+    visibility: hidden;
+  }
+
+  42% {
+    visibility: hidden;
+  }
+
+  43% {
+    visibility: visible;
+  }
+
+  44% {
+    visibility: visible;
+  }
+
+  45% {
+    visibility: hidden;
+  }
+
+  46% {
+    visibility: hidden;
+  }
+
+  47% {
+    visibility: visible;
+  }
+
+  60% {
+    visibility: visible;
+  }
+
+  61% {
+    visibility: hidden;
+  }
+
+  64% {
+    visibility: hidden;
+  }
+
+  65% {
+    visibility: visible;
+  }
+
+  70% {
+    visibility: visible;
+  }
+
+  71% {
+    visibility: hidden;
+  }
+
+  72% {
+    visibility: hidden;
+  }
+
+  73% {
+    visibility: visible;
+  }
+
+  100% {
+    visibility: visible;
+  }
+}
+
 
 //  모바일 스타일
 

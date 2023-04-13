@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           });
         }
 
-        const won = target.record < recordNumber;
+        const won = recordNumber < target.record;
 
         if (won) {
           const updateResult = await rankCollection.updateOne({ _id: target._id }, { $set: { record: recordNumber, ip } });
