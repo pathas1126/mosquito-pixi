@@ -42,7 +42,7 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
       const moiquitoes = new Array(length).fill(0).map(() => {
         const mosquito = new PIXI.Sprite(texture);
         mosquito.interactive = true;
-        mosquito.hitArea = new PIXI.Circle(mosquito.x, mosquito.y, 500);
+        mosquito.hitArea = new PIXI.Circle(mosquito.x, mosquito.y, 30);
 
         mosquito.cursor = 'pointer';
         mosquito.zIndex = 1;

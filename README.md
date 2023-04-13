@@ -20,7 +20,7 @@
 ## Deploy
 
 - vercel
-- mosquito-pixi.vercel.app
+- https://mosquito-pixi.vercel.app
 
 ## References
 
