@@ -1,11 +1,12 @@
+import Alert from '@/components/alert/alert';
 import Mosquito from '@/components/mosquito/mosquito';
+import useMobile from '@/hooks/useMobile';
+import useSeconds from '@/hooks/useSeconds';
 import styles from '@/styles/home.module.scss';
 import dayjs from 'dayjs';
 import { GetServerSidePropsContext } from 'next';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import localFont from 'next/font/local';
-import useMobile from '@/hooks/useMobile';
-import Alert from '@/components/alert/alert';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const fontCyberpunk = localFont({ src: './fonts/Cyberpunk.ttf' });
 const fontBlenderProBook = localFont({ src: './fonts/BlenderPro-Book.woff2' });
@@ -28,6 +29,9 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
   const [mosquitoes, setMosquitoes] = useState<{ length: number; index: number; backgroundImage: string; title: string; buttonClassName: string }[]>([]);
   const [totalMosquitoLength, setTotalMosquitoLength] = useState(0);
   const [killedMosquitoLength, setKilledMosquitoLength] = useState(0);
+
+  const seconds = useSeconds({ start: killedMosquitoLength > 0, end: killedMosquitoLength === totalMosquitoLength });
+  // console.log('🚀 ~ file: index.tsx:34 ~ seconds:', seconds);
 
   const [date, setDate] = useState('');
 
@@ -64,7 +68,11 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
         return setAlertText('Mission: Catch all mosquitoes.');
       case totalMosquitoLength:
         playCompleteSound();
-        return setAlertText('Mission Complete.');
+        // const todayKey = dayjs().get('D').toString();
+        // const todayRecords = localStorage.getItem(todayKey) ? (JSON.parse(localStorage.getItem(todayKey) as string) as number[]) : [];
+        const completeText = `Mission Complete.`;
+        setAlertText(completeText);
+        return;
     }
   }, [killedMosquitoLength, totalMosquitoLength]);
 
@@ -96,14 +104,16 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
   }, []);
 
   const leftMosquitoLength = totalMosquitoLength - killedMosquitoLength;
+  const title = !!killedMosquitoLength ? (leftMosquitoLength ? leftMosquitoLength : 'Mission Clear') : 'We-ing We-ing';
 
   return (
     <main className={styles.main} id="home">
       {!!alertText && <Alert closeAlert={closeAlert} text={alertText} />}
       <header className={styles.header}>
-        <h2 className={fontCyberpunk.className}>{!!killedMosquitoLength ? (leftMosquitoLength ? leftMosquitoLength : 'Misson Clear!') : 'We-ing We-ing'}</h2>
+        <h2 className={fontCyberpunk.className}>{title}</h2>
         <h6 className={fontBlenderProBook.className}>
-          {date || '-'} Seoul Mosquito Index<span className={styles['cyber-glitch']}>_</span>
+          {date || ''} Seoul Mosquito Index<span className={styles['cyber-glitch']}>_</span>
+          {!!seconds.value && seconds.formatted}
         </h6>
       </header>
       <div className={styles['section-wrapper']}>
@@ -219,8 +229,6 @@ const getMosquitoStatusURL = (dateString: string) => {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const today = dayjs().format('YYYY-MM-DD');
-
-  // return { props: { mosquitoStatus: null } };
 
   try {
     const resToday = await fetch(getMosquitoStatusURL(today));

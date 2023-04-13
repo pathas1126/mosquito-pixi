@@ -116,7 +116,7 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
 
     if (!mainElement) return;
     if (!pixi) {
-      const app = new PIXI.Application({ resizeTo: mainElement });
+      const app = new PIXI.Application({ resizeTo: mainElement, antialias: true });
       app.stage.sortableChildren = true;
 
       mainElement.appendChild(app.view as any);
