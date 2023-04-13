@@ -42,7 +42,7 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
       const moiquitoes = new Array(length).fill(0).map(() => {
         const mosquito = new PIXI.Sprite(texture);
         mosquito.interactive = true;
-        mosquito.hitArea = new PIXI.Circle(mosquito.x, mosquito.y, 30);
+        mosquito.hitArea = new PIXI.Circle(mosquito.x, mosquito.y, 45);
 
         mosquito.cursor = 'pointer';
         mosquito.zIndex = 1;
@@ -116,7 +116,7 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
 
     if (!mainElement) return;
     if (!pixi) {
-      const app = new PIXI.Application({ resizeTo: mainElement, antialias: true });
+      const app = new PIXI.Application({ resizeTo: mainElement, antialias: false });
       app.stage.sortableChildren = true;
 
       mainElement.appendChild(app.view as any);
