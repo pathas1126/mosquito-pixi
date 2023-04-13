@@ -2,7 +2,7 @@ import styles from './mosquito.module.css';
 import * as PIXI from 'pixi.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as TWEEDLE from 'tweedle.js';
-import { DropShadowFilter } from '@pixi/filter-drop-shadow';
+import { DropShadowFilter } from 'pixi-filters';
 import { vibrate } from '@/utils/vibrate';
 
 interface IProps {

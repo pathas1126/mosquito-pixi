@@ -1,12 +1,13 @@
 import Alert from '@/components/alert/alert';
 import Mosquito from '@/components/mosquito/mosquito';
 import useMobile from '@/hooks/useMobile';
-import useSeconds from '@/hooks/useSeconds';
+import useSeconds, { getFormattedTime } from '@/hooks/useSeconds';
 import styles from '@/styles/home.module.scss';
 import dayjs from 'dayjs';
 import { GetServerSidePropsContext } from 'next';
 import localFont from 'next/font/local';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Rank } from './api/rank';
 
 const fontCyberpunk = localFont({ src: './fonts/Cyberpunk.ttf' });
 const fontBlenderProBook = localFont({ src: './fonts/BlenderPro-Book.woff2' });
@@ -29,6 +30,9 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
   const [mosquitoes, setMosquitoes] = useState<{ length: number; index: number; backgroundImage: string; title: string; buttonClassName: string }[]>([]);
   const [totalMosquitoLength, setTotalMosquitoLength] = useState(0);
   const [killedMosquitoLength, setKilledMosquitoLength] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const refTime = useRef(0);
 
   const seconds = useSeconds({ start: killedMosquitoLength > 0, end: killedMosquitoLength === totalMosquitoLength });
   // console.log('🚀 ~ file: index.tsx:34 ~ seconds:', seconds);
@@ -65,16 +69,38 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
     switch (killedMosquitoLength) {
       case 1:
         playBackgroundSound();
-        return setAlertText('Mission: Catch all mosquitoes.');
+        if (killedMosquitoLength !== totalMosquitoLength) return setAlertText('Mission: Catch all mosquitoes.');
       case totalMosquitoLength:
         playCompleteSound();
-        // const todayKey = dayjs().get('D').toString();
-        // const todayRecords = localStorage.getItem(todayKey) ? (JSON.parse(localStorage.getItem(todayKey) as string) as number[]) : [];
-        const completeText = `Mission Complete.`;
-        setAlertText(completeText);
+        let completeText = `Mission Complete In ${getFormattedTime(refTime.current)}`;
+        setLoading(true);
+        fetch(`/api/rank?record=${refTime.current}&date=${date}`)
+          .then((res) => res.json())
+          .then((result: { data: Rank }) => {
+            const {
+              data: { isMe, ip, record },
+            } = result;
+
+            const formattedRecord = getFormattedTime(record);
+
+            completeText += `\r\n\r\nToday's Champion`;
+            completeText += `\r\n> `;
+            completeText += !isMe ? `[Me] ${formattedRecord}` : `[${ip}] ${formattedRecord}`;
+
+            setAlertText(completeText);
+          })
+          .catch((error) => {
+            console.error(error);
+            setAlertText(completeText);
+          })
+          .finally(() => setLoading(false));
         return;
     }
-  }, [killedMosquitoLength, totalMosquitoLength]);
+  }, [killedMosquitoLength, totalMosquitoLength, date]);
+
+  useEffect(() => {
+    refTime.current = seconds.value;
+  }, [seconds]);
 
   const playBackgroundSound = () => {
     const audio = new Audio('/sounds/stars.mp3');
@@ -227,8 +253,12 @@ const getMosquitoStatusURL = (dateString: string) => {
   return `http://openapi.seoul.go.kr:8088/${process.env.SEOUL_DATA_API_KEY}/json/MosquitoStatus/1/1/${dateString}`;
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getServerSideProps(context: GetServerSidePropsContext): Promise<{ props: { mosquitoStatus: IMosquitoStatus | null } }> {
   const today = dayjs().format('YYYY-MM-DD');
+
+  // return {
+  //   props: { mosquitoStatus: { MOSQUITO_DATE: '2023-04-13', MOSQUITO_VALUE_HOUSE: '1', MOSQUITO_VALUE_PARK: '0', MOSQUITO_VALUE_WATER: '0' } },
+  // };
 
   try {
     const resToday = await fetch(getMosquitoStatusURL(today));
