@@ -25,6 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta property="og:description" content="오늘 서울 모기지수는?" />
         <meta property="og:article:author" content="위잉위잉" />
         <link rel="icon" href="/mosquito.png" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2911304837243701" crossOrigin="anonymous" />
       </Head>
       <Layout className={`${notoSansKr.className} ${notoSerifKr} ${blenderProBook} ${oxanium}`}>
         <Component {...pageProps} />
