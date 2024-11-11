@@ -1,5 +1,6 @@
+import dynamic from 'next/dynamic';
 import Alert from '@/components/alert/alert';
-import Mosquito from '@/components/mosquito/mosquito';
+import Skeleton from 'react-loading-skeleton';
 import useMobile from '@/hooks/useMobile';
 import useSeconds, { getFormattedTime } from '@/hooks/useSeconds';
 import styles from '@/styles/home.module.scss';
@@ -9,6 +10,13 @@ import localFont from 'next/font/local';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Rank } from './api/rank';
 
+const DynamicMosquito = dynamic(() => import('@/components/mosquito/mosquito'), {
+  loading: () => (
+    <div style={{ height: '100%' }}>
+      <Skeleton height="100%" />
+    </div>
+  ),
+});
 const fontCyberpunk = localFont({ src: './fonts/Cyberpunk.ttf' });
 const fontBlenderProBook = localFont({ src: './fonts/BlenderPro-Book.woff2' });
 
@@ -178,7 +186,7 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
                   <div key={index} className={styles['mosquito-mobile-wrapper']}>
                     <article className={`${styles['mosquito-mobile']} ${styles[getTileBackgroundClassName(mosquito.index)]}`}>
                       <div className={styles['mosquito-rectangle']}>
-                        <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} onKillMosquito={killMosquito} />
+                        <DynamicMosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} onKillMosquito={killMosquito} />
                       </div>
                       <span className={styles['mosquito-info']} data-title={mosquito.title}>
                         Mosquito Index: {mosquito.index}
@@ -193,7 +201,7 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
               {mosquitoes.map((mosquito, index) => (
                 <article className={`${styles['mosquito-wrapper']} ${styles[getTileBackgroundClassName(mosquito.index)]}`} key={index}>
                   <div className={styles['mosquito-rectangle']}>
-                    <Mosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} onKillMosquito={killMosquito} />
+                    <DynamicMosquito mosquitoLength={mosquito.length} backgroundImage={mosquito.backgroundImage} onKillMosquito={killMosquito} />
                   </div>
                   <span className={styles['mosquito-info']} data-title={mosquito.title}>
                     Mosquito Index: {mosquito.index}
