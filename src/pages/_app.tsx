@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Noto_Sans_KR, Noto_Serif_KR, Oxanium } from 'next/font/google';
 import localFont from 'next/font/local';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const blenderProBook = localFont({ src: './fonts/BlenderPro-Book.woff2' });
 

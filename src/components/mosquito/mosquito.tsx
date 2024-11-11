@@ -1,9 +1,8 @@
-import styles from './mosquito.module.css';
+import { vibrate } from '@/utils/vibrate';
 import * as PIXI from 'pixi.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as TWEEDLE from 'tweedle.js';
-import { DropShadowFilter } from 'pixi-filters';
-import { vibrate } from '@/utils/vibrate';
+import styles from './mosquito.module.css';
 
 interface IProps {
   mosquitoLength: number;
@@ -48,7 +47,6 @@ const Mosquito: React.FC<IProps> = ({ mosquitoLength, backgroundImage, pathPoint
         mosquito.zIndex = 1;
         mosquito.width = 30;
         mosquito.height = 30;
-        mosquito.filters = [new DropShadowFilter()];
         mosquito.on('pointerdown', (event) => {
           const textureBlood = PIXI.Texture.from('blood.png');
           const spriteBlood = new PIXI.Sprite(textureBlood);
