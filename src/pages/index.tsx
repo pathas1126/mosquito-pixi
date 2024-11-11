@@ -205,6 +205,7 @@ const Home: React.FC<IProps> = ({ mosquitoStatus }) => {
         ) : (
           <section className={`${styles['mosquito-section-no-data']} ${fontCyberpunk.className}`}>
             <h2>Something{"'"}s Going Wrong</h2>
+            {dayjs().month() < 4 || dayjs().month() > 9 ? <p>Only available in summer(5~10)</p> : ''}
           </section>
         )}
       </div>
